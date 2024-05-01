@@ -18,7 +18,7 @@ const { pages } = Astro.props as Props;
     pages.map((page) => (
       <a
         class="text-white block text-center px-2 py-0 no-underline text-sm font-bold hover:text-blue-300 focus:text-blue-300 md:inline-block md:px-4 md:py-5"
-        href={page.slug}
+        href=`/${page.slug}`
       >
         {page.title}
       </a>
