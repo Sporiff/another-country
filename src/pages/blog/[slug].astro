@@ -1,0 +1,72 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+const { slug } = Astro.params;
+
+let response = await fetch("https://acwp.sporiff.dev/graphql", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    query: `
+      {
+         post(id: "${slug}", idType: SLUG) {
+            author {
+               node {
+                  avatar {
+                     url
+                  }
+                  email
+                  name
+               }
+            }
+            content(format: RENDERED)
+            featuredImage {
+               node {
+                  altText
+                  sourceUrl
+               }
+            }
+            title(format: RENDERED)
+         }
+      }
+   `,
+  }),
+});
+
+let post = await response.json();
+let postData = post.data.post;
+
+export async function getStaticPaths() {
+  let data = await fetch("https://acwp.sporiff.dev/graphql", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `
+         {
+            posts {
+               nodes {
+                  id: databaseId
+                  slug
+                  title(format: RENDERED)
+               }
+            }
+         }
+         `,
+    }),
+  });
+  let posts = await data.json();
+  let postList = posts.data.posts.nodes;
+
+  return postList.map((post: any) => ({
+    params: { slug: post.slug },
+    props: { post: post },
+  }));
+}
+---
+
+<Layout title={postData.title}>
+  <article>
+    <h1 set:html={postData.title} />
+    <Fragment set:html={postData.content} />
+  </article>
+</Layout>

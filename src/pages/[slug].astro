@@ -1,0 +1,105 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const { slug } = Astro.params;
+
+const response = await fetch("https://acwp.sporiff.dev/graphql", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    query: `
+      {
+         page(id: "/${slug}/", idType: URI) {
+            title
+            content(format:RENDERED)
+            featuredImage{
+               node{
+                  sourceUrl
+                  altText
+               }
+            }
+         }
+      }
+   `,
+  }),
+});
+
+export async function getStaticPaths() {
+  let data = await fetch("https://acwp.sporiff.dev/graphql", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `
+         {
+            pages {
+               nodes {
+                  id: databaseId
+                  slug
+                  title(format:RENDERED)
+               }
+            }
+         }
+         `,
+    }),
+  });
+  let pages = await data.json();
+  let pageList = pages.data.pages.nodes;
+
+  return pageList.map((post: any) => ({
+    params: { slug: post.slug },
+    props: { post: post },
+  }));
+}
+
+const json = await response.json();
+const { page } = json.data;
+const { featuredImage } = page;
+---
+
+<Layout title={page.title}>
+  <section>
+    <h1 class="text-center" set:html={page.title} />
+    {
+      featuredImage && (
+        <img
+          alt={featuredImage.node.altText}
+          src={featuredImage.node.sourceUrl}
+          class="mx-auto"
+        />
+      )
+    }
+    <Fragment set:html={page.content} />
+    {
+      page.title == "Contact us" && (
+        <>
+          <>
+            <h2 class="text-center">Email us</h2>
+            <p class="text-center">Fill in the form below to get in touch</p>
+          </>
+        </>
+      )
+    }
+  </section>
+</Layout>
+
+<style is:global>
+  .wp-block-media-text {
+    @apply box-border grid auto-rows-auto auto-cols-[50%_1fr] mx-auto;
+  }
+
+  .wp-block-media-text__media {
+    @apply self-center grid-cols-1 grid-rows-1 m-0;
+  }
+
+  .wp-block-media-text .wp-block-media-text__media {
+    @apply m-0 col-start-1 row-start-1 row-end-1;
+  }
+
+  .wp-block-media-text .wp-block-media-text__content {
+    @apply break-words col-start-2 col-end-2 row-start-1 row-end-1 p-[0_8%] self-center;
+  }
+
+  .wp-block-media-text__media img {
+    @apply h-auto max-w-[unset] align-middle w-full;
+  }
+</style>

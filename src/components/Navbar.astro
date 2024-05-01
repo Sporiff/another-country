@@ -1,0 +1,33 @@
+---
+interface Props {
+  pages: PageItem[];
+}
+const { pages } = Astro.props as Props;
+---
+
+<div
+  class="w-full hidden top-20 m-0 md:block md:static md:w-auto md:bg-none items-center text-center bg-slate-700 mb-3"
+>
+  <a
+    class="text-white block text-center px-2 py-0 no-underline text-sm font-bold hover:text-blue-300 focus:text-blue-300 md:inline-block md:px-4 md:py-5"
+    href="/"
+  >
+    Home
+  </a>
+  {
+    pages.map((page) => (
+      <a
+        class="text-white block text-center px-2 py-0 no-underline text-sm font-bold hover:text-blue-300 focus:text-blue-300 md:inline-block md:px-4 md:py-5"
+        href={page.slug}
+      >
+        {page.title}
+      </a>
+    ))
+  }
+  <a
+    class="text-white block text-center px-2 py-0 no-underline text-sm font-bold hover:text-blue-300 focus:text-blue-300 md:inline-block md:px-4 md:py-5"
+    href="/blog"
+  >
+    Blog
+  </a>
+</div>

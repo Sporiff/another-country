@@ -1,0 +1,53 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+let data = await fetch("https://acwp.sporiff.dev/graphql", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    query: `
+         {
+            posts {
+               nodes {
+                  id: databaseId
+                  slug
+                  title(format: RENDERED)
+               }
+            }
+         }
+         `,
+  }),
+});
+
+interface PostStructure {
+  id: number;
+  slug: string;
+  title: string;
+}
+
+let posts = await data.json();
+let postList = posts.data.posts.nodes;
+---
+
+<Layout title="Blog">
+  <section>
+    <h1 class="text-center">Blog posts</h1>
+    {
+      !postList && (
+        <main>
+          <h2>No results.</h2>
+        </main>
+      )
+    }
+    {
+      postList &&
+        postList.map((post: PostStructure) => (
+          <article>
+            <h2>
+              <a href={`/blog/${post.slug}/`} set:html={post.title} />
+            </h2>
+          </article>
+        ))
+    }
+  </section>
+</Layout>

@@ -1,0 +1,77 @@
+---
+import Navbar from "../components/Navbar.astro";
+
+let data = await fetch("https://acwp.sporiff.dev/graphql", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    query: `
+         {
+            pages {
+               nodes {
+                  id: databaseId
+                  slug
+                  title(format:RENDERED)
+               }
+            }
+         }
+         `,
+  }),
+});
+let pages = await data.json();
+let pageList = pages.data.pages.nodes;
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+
+  <body class="prose prose-stone lg:prose-xl container md:mx-auto">
+    <nav>
+      <Navbar pages={pageList} />
+    </nav>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-center;
+  }
+
+  .opening-hours {
+    @apply text-center;
+  }
+
+  form {
+    @apply mx-auto w-fit;
+  }
+
+  form input,
+  form textarea {
+    @apply border-solid border;
+  }
+
+  form input[value="Submit"] {
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full;
+  }
+</style>
