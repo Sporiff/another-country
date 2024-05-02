@@ -1,33 +1,51 @@
 ---
+import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
+
 interface Props {
   pages: PageItem[];
 }
 const { pages } = Astro.props as Props;
 ---
 
-<div
-  class="w-full hidden top-20 m-0 md:block md:static md:w-auto md:bg-none items-center text-center bg-slate-700 mb-3"
->
-  <a
-    class="text-white block text-center px-2 py-0 no-underline text-sm font-bold hover:text-blue-300 focus:text-blue-300 md:inline-block md:px-4 md:py-5"
-    href="/"
-  >
-    Home
-  </a>
-  {
-    pages.map((page) => (
-      <a
-        class="text-white block text-center px-2 py-0 no-underline text-sm font-bold hover:text-blue-300 focus:text-blue-300 md:inline-block md:px-4 md:py-5"
-        href=`/${page.slug}`
-      >
-        {page.title}
+<header class="flex flex-col lg:flex-row justify-between items-center my-5 text-base">
+  <Astronav>
+    <div class="flex w-10/12 md:w-full lg:w-auto items-center justify-between">
+      <a class="inline-flex items-center no-underline" href="/" title="Home">
+        <img class="size-10 md:size-14" src="/favicon.png" alt="" />
+        <span class="ml-4 font-semibold">Another Country</span>
       </a>
-    ))
-  }
-  <a
-    class="text-white block text-center px-2 py-0 no-underline text-sm font-bold hover:text-blue-300 focus:text-blue-300 md:inline-block md:px-4 md:py-5"
-    href="/blog"
-  >
-    Blog
-  </a>
-</div>
+      <div class="flex lg:hidden">
+        <MenuIcon class="w-6 h-6 text-gray-800" />
+      </div>
+    </div>
+    <MenuItems class="hidden w-full lg:w-auto mt-2 lg:flex lg:mt-0">
+      <ul class="flex flex-col lg:flex-row lg:gap-3 list-none">
+        <li>
+          <a
+            href="/"
+            class="flex lg:px-3 py-2 items-center text-gray-600 hover:text-gray-900 no-underline">
+            <span>Home</span>
+          </a>
+        </li>
+        {
+          pages.map((page) => (
+          <li>
+            <a
+            href=`/${page.slug}`
+            class="flex lg:px-3 py-2 items-center text-gray-600 hover:text-gray-900 no-underline">
+            <span>{page.title}</span>
+            </a>
+          </li>
+          ))
+        }
+        <li>
+          <a
+            href="/blog"
+            class="flex lg:px-3 py-2 items-center text-gray-600 hover:text-gray-900 no-underline">
+            <span>Blog</span>
+          </a>
+        </li>
+      </ul>
+    </MenuItems>
+  </Astronav>
+</header>
