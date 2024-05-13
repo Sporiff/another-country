@@ -1,19 +1,22 @@
 ---
 import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 import { Image } from "astro:assets";
-import favicon from "../images/favicon.png";
 
 interface Props {
   pages: PageItem[];
+  imageSrc: string;
+  imageAlt: string;
+  height: number;
+  width: number;
 }
-const { pages } = Astro.props as Props;
+const { pages, imageSrc, imageAlt = "", height, width } = Astro.props as Props;
 ---
 
 <header class="flex flex-col lg:flex-row justify-between items-center my-5 text-base">
   <Astronav>
     <div class="flex w-10/12 md:w-full lg:w-auto items-center justify-between">
       <a class="inline-flex items-center no-underline" href="/" title="Home">
-        <Image class="size-10 md:size-14" src={favicon} alt="" loading="eager" />
+        <Image class="size-10 md:size-14" src={imageSrc} alt={imageAlt} height={height} width={width} loading="eager" />
         <span class="ml-4 font-semibold">Another Country</span>
       </a>
       <div class="flex lg:hidden">
