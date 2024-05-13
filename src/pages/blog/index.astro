@@ -1,7 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 
-let data = await fetch("https://acwp.sporiff.dev/graphql", {
+let data = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({

@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 
 const { slug } = Astro.params;
 
-let response = await fetch("https://acwp.sporiff.dev/graphql", {
+let response = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
@@ -37,7 +37,7 @@ let post = await response.json();
 let postData = post.data.post;
 
 export async function getStaticPaths() {
-  let data = await fetch("https://acwp.sporiff.dev/graphql", {
+  let data = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
