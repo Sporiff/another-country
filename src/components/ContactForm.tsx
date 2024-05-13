@@ -14,12 +14,14 @@ const ContactForm: React.FC<{
   endpoint: string;
   mailgun_key: string;
 }> = (props) => {
-  const [formData, setFormData] = useState<FormData>({
+  const initialForm: FormData = {
     to: props.email,
     from: "",
     subject: "",
     html: "",
-  });
+  };
+
+  const [formData, setFormData] = useState<FormData>(initialForm);
 
   const [loading, setLoading] = useState(false);
   const [submissionResult, setSubmissionResult] = useState<
@@ -58,12 +60,7 @@ const ContactForm: React.FC<{
 
       setSubmissionResult("success");
       console.log("Form submitted successfully");
-      setFormData({
-        to: props.email,
-        from: "",
-        subject: "",
-        html: "",
-      });
+      setFormData(initialForm);
     } catch (error) {
       setSubmissionResult("error");
       console.error("Error submitting form:", error);
