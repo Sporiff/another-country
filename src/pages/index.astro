@@ -7,29 +7,33 @@ const response = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
     query: `
-    {
-    mediaItem(id: "fisheye1", idType: SLUG) {
-      altText
-      sourceUrl
-      title
-      mediaDetails {
-        width
-        height
-    }
-  }
-}
+      {
+        mediaItem(id: "fisheye1", idType: SLUG) {
+          altText
+          sourceUrl
+          title
+          mediaDetails {
+            width
+            height
+          }
+        }
+        generalSettings {
+          title
+        }
+      }
    `,
   }),
 });
 
-const hero = await response.json();
+const siteInfo = await response.json();
 
-const { altText, sourceUrl } = hero.data.mediaItem;
-const { width, height } = hero.data.mediaItem.mediaDetails;
+const { altText, sourceUrl } = siteInfo.data.mediaItem;
+const { width, height } = siteInfo.data.mediaItem.mediaDetails;
+const { title } = siteInfo.data.generalSettings;
 ---
 
-<Layout title="Another country">
-  <h1 class="text-center">Another Country</h1>
+<Layout title={title}>
+  <h1 class="text-center">{title}</h1>
   <Image
     class="w-full"
     width={width}
