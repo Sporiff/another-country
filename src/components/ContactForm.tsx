@@ -58,6 +58,12 @@ const ContactForm: React.FC<{
 
       setSubmissionResult("success");
       console.log("Form submitted successfully");
+      setFormData({
+        to: props.email,
+        from: "",
+        subject: "",
+        html: "",
+      });
     } catch (error) {
       setSubmissionResult("error");
       console.error("Error submitting form:", error);
