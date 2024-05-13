@@ -11,7 +11,7 @@ const response = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
   body: JSON.stringify({
     query: `
       {
-         page(id: "/${slug}/", idType: URI) {
+        page(id: "/${slug}/", idType: URI) {
           title
           content(format: RENDERED)
           featuredImage {
@@ -36,16 +36,16 @@ export async function getStaticPaths() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       query: `
-         {
-            pages {
-               nodes {
-                  id: databaseId
-                  slug
-                  title(format:RENDERED)
-               }
-            }
-         }
-         `,
+        {
+          pages {
+              nodes {
+                id: databaseId
+                slug
+                title(format:RENDERED)
+              }
+          }
+        }
+      `,
     }),
   });
   let pages = await data.json();

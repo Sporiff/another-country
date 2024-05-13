@@ -6,16 +6,16 @@ let data = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
     query: `
-         {
-            posts {
-               nodes {
-                  id: databaseId
-                  slug
-                  title(format: RENDERED)
-               }
+      {
+        posts {
+            nodes {
+              id: databaseId
+              slug
+              title(format: RENDERED)
             }
-         }
-         `,
+        }
+      }
+    `,
   }),
 });
 
