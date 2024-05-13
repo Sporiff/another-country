@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ContactForm from "../components/ContactForm";
+import { Image } from "astro:assets";
 
 const { slug } = Astro.params;
 
@@ -11,15 +12,19 @@ const response = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
     query: `
       {
          page(id: "/${slug}/", idType: URI) {
-            title
-            content(format:RENDERED)
-            featuredImage{
-               node{
-                  sourceUrl
-                  altText
-               }
+          title
+          content(format: RENDERED)
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              mediaDetails {
+                width
+                height
+              }
             }
-         }
+          }
+        }
       }
    `,
   }),
@@ -55,6 +60,7 @@ export async function getStaticPaths() {
 const json = await response.json();
 const { page } = json.data;
 const { featuredImage } = page;
+const { width, height } = page;
 ---
 
 <Layout title={page.title}>
@@ -62,10 +68,12 @@ const { featuredImage } = page;
     <h1 class="text-center" set:html={page.title} />
     {
       featuredImage && (
-        <img
+        <Image
           alt={featuredImage.node.altText}
           src={featuredImage.node.sourceUrl}
           class="mx-auto"
+          width={width}
+          height={height}
         />
       )
     }
@@ -73,16 +81,14 @@ const { featuredImage } = page;
     {
       page.title == "Contact us" && (
         <>
-          <>
-            <h2 class="text-center">Email us</h2>
-            <p class="text-center">Fill in the form below to get in touch</p>
-            <ContactForm
-              client:only="react"
-              email={import.meta.env.EMAIL}
-              endpoint={import.meta.env.MAILGUN_ENDPOINT}
-              mailgun_key={import.meta.env.MAILGUN_KEY}
-            />
-          </>
+          <h2 class="wp-block-heading">Email us</h2>
+          <p class="text-center">Fill in the form below to get in touch</p>
+          <ContactForm
+            client:only="react"
+            email={import.meta.env.EMAIL}
+            endpoint={import.meta.env.MAILGUN_ENDPOINT}
+            mailgun_key={import.meta.env.MAILGUN_KEY}
+          />
         </>
       )
     }

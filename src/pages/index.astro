@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 
 const response = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
@@ -6,24 +7,35 @@ const response = await fetch(`${import.meta.env.GRAPHQL_ENDPOINT}`, {
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
     query: `
-      {
-         mediaItem(id: "fisheye1", idType: SLUG) {
-            altText
-            sourceUrl
-            title
-         }
-      }
+    {
+    mediaItem(id: "fisheye1", idType: SLUG) {
+      altText
+      sourceUrl
+      title
+      mediaDetails {
+        width
+        height
+    }
+  }
+}
    `,
   }),
 });
 
 const hero = await response.json();
 
-const { altText } = hero.data.mediaItem;
-const { sourceUrl } = hero.data.mediaItem;
+const { altText, sourceUrl } = hero.data.mediaItem;
+const { width, height } = hero.data.mediaItem.mediaDetails;
 ---
 
 <Layout title="Another country">
   <h1 class="text-center">Another Country</h1>
-  <img class="w-full" src={sourceUrl} alt={altText} />
+  <Image
+    class="w-full"
+    width={width}
+    height={height}
+    src={sourceUrl}
+    alt={altText}
+    loading="eager"
+  />
 </Layout>
