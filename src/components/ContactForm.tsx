@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 
 interface FormData {
-  from: string;
+  name: string;
+  email: string;
   subject: string;
   html: string;
 }
@@ -10,7 +11,8 @@ const ContactForm: React.FC<{
   endpoint: string;
 }> = (props) => {
   const initialForm: FormData = {
-    from: "",
+    name: "",
+    email: "",
     subject: "",
     html: "",
   };
@@ -46,7 +48,7 @@ const ContactForm: React.FC<{
             mutation {
               sendEmail(
                 input: {
-                  from: "${formData.from}",
+                  from: "${formData.name} <${formData.email}>",
                   subject: "${formData.subject}",
                   body: "${formData.html}",
                   clientMutationId: "${formData.subject}"}
@@ -110,23 +112,43 @@ const ContactForm: React.FC<{
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label
-              htmlFor="from"
+              htmlFor="email"
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
             >
-              From
+              Email address
             </label>
             <input
-              id="from"
-              name="from"
+              id="email"
+              name="email"
               type="email"
               className="appearance-none block w-full bg-gray-200 text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
               placeholder="you@email.com"
-              value={formData.from}
+              value={formData.email}
               onChange={handleChange}
               required
             />
           </div>
           <div className="w-full md:w-1/2 px-3">
+            <label
+              htmlFor="name"
+              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+            >
+              Name
+            </label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              placeholder="Joe Bloggs"
+            />
+          </div>
+        </div>
+        <div className="flex flex-wrap -mx-3 mb-6">
+          <div className="w-full px-3">
             <label
               htmlFor="subject"
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -137,12 +159,12 @@ const ContactForm: React.FC<{
               id="subject"
               name="subject"
               type="text"
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               value={formData.subject}
               onChange={handleChange}
+              placeholder="What do you want to talk about?"
               required
-              placeholder="Subject"
-            />
+            ></input>
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
