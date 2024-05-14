@@ -1,20 +1,15 @@
 import React, { useState } from "react";
-import { stringToBase64 } from "uint8array-extras";
 
 interface FormData {
-  to: string;
   from: string;
   subject: string;
   html: string;
 }
 
 const ContactForm: React.FC<{
-  email: string;
   endpoint: string;
-  mailgun_key: string;
 }> = (props) => {
   const initialForm: FormData = {
-    to: props.email,
     from: "",
     subject: "",
     html: "",
@@ -42,23 +37,33 @@ const ContactForm: React.FC<{
     setLoading(true);
     setSubmissionResult(null);
 
-    let body = new FormData();
-    body.append("from", formData.from);
-    body.append("to", formData.to);
-    body.append("subject", formData.subject);
-    body.append("html", formData.html);
-
     try {
-      await fetch(props.endpoint, {
+      const send = await fetch(props.endpoint, {
         method: "POST",
-        headers: {
-          Authorization: "Basic " + stringToBase64(`api:${props.mailgun_key}`),
-        },
-        body: body,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: `
+            mutation {
+              sendEmail(
+                input: {
+                  from: "${formData.from}",
+                  subject: "${formData.subject}",
+                  body: "${formData.html}",
+                  clientMutationId: "${formData.subject}"}
+              ) {
+                sent
+                message
+              }
+            }
+          `,
+        }),
       });
 
+      const response = await send.json();
+      const { message } = response.data.sendEmail;
+
       setSubmissionResult("success");
-      console.log("Form submitted successfully");
+      console.log(`Form submitted successfully ${message}`);
     } catch (error) {
       setSubmissionResult("error");
       console.error("Error submitting form:", error);

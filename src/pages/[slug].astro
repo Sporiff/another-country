@@ -85,9 +85,7 @@ const { width, height } = page;
           <p class="text-center">Fill in the form below to get in touch</p>
           <ContactForm
             client:only="react"
-            email={import.meta.env.EMAIL}
-            endpoint={import.meta.env.MAILGUN_ENDPOINT}
-            mailgun_key={import.meta.env.MAILGUN_KEY}
+            endpoint={import.meta.env.GRAPHQL_ENDPOINT}
           />
         </>
       )
