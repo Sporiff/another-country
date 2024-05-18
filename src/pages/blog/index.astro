@@ -27,17 +27,20 @@ interface PostStructure {
 
 let posts = await data.json();
 let postList = posts.data.posts.nodes;
+
+console.log(postList);
 ---
 
 <Layout title="Blog">
   <section>
     <h1 class="text-center">Blog posts</h1>
     {
-      !postList && (
-        <main>
-          <h2>No results.</h2>
-        </main>
-      )
+      !postList ||
+        (postList.length == 0 && (
+          <main>
+            <h2>No blog posts yet.</h2>
+          </main>
+        ))
     }
     {
       postList &&
