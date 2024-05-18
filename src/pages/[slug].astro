@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ContactForm from "../components/ContactForm";
+import ContactForm from "../components/ContactForm.vue";
 import { Image } from "astro:assets";
 
 const { slug } = Astro.params;
@@ -84,7 +84,7 @@ const { width, height } = page;
           <h2 class="wp-block-heading">Email us</h2>
           <p class="text-center">Fill in the form below to get in touch</p>
           <ContactForm
-            client:only="react"
+            client:only="vue"
             endpoint={import.meta.env.GRAPHQL_ENDPOINT}
           />
         </>
