@@ -23,6 +23,6 @@
     "vue": "^3.4.30"
   },
   "devDependencies": {
-    "@types/node": "^20.14.8"
+    "@types/node": "^20.14.9"
   }
 }
