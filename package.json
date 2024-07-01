@@ -20,7 +20,7 @@
     "astro-navbar": "^2.3.3",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.5.2",
-    "vue": "^3.4.30"
+    "vue": "^3.4.31"
   },
   "devDependencies": {
     "@types/node": "^20.14.8"
